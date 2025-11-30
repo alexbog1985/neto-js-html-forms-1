@@ -1,7 +1,7 @@
 // TODO: write code here
 
 // comment this to pass build
-const unusedVariable = "variable";
+// const unusedVariable = "variable";
 
 // for demonstration purpose only
 export default function demo(value) {
@@ -9,3 +9,7 @@ export default function demo(value) {
 }
 
 console.log("app.js included");
+
+import { Popover } from "../components/popovers/popover";
+
+new Popover(document.querySelector('[data-toggle="popover"]'));
