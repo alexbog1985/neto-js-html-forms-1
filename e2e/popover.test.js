@@ -6,9 +6,9 @@ describe("Popover test", () => {
 
   beforeAll(async () => {
     browser = await puppeteer.launch({
-      headless: false,
-      slowMo: 100,
-      devtools: true,
+      headless: "new",
+      // slowMo: 100,
+      // devtools: true,
       args: ["--no-sandbox"],
     });
 
