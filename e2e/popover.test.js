@@ -1,18 +1,39 @@
 import puppeteer from "puppeteer";
+import { fork } from "child_process";
+
+jest.setTimeout(30000); // default puppeteer timeout
 
 describe("Popover test", () => {
   let browser;
   let page;
+  let server;
 
   beforeAll(async () => {
-    browser = await puppeteer.launch({
-      headless: "new",
-      // slowMo: 100,
-      // devtools: true,
-      args: ["--no-sandbox"],
+    server = fork(`${__dirname}/e2e.server.js`);
+    await new Promise((resolve, reject) => {
+      if (server.connected) {
+        process.send("ok");
+        resolve();
+      } else {
+        reject();
+      }
     });
 
+    const options = {
+      args: ["--no-sandbox", "--disable-setuid-sandbox"], // настройка для сред ci/cd
+      slowMo: 100,
+      // расскомментировать для локального прогона и закомменитровать для ci/cd
+      // headless: false,
+      // devtools: false,
+    };
+
+    browser = await puppeteer.launch(options);
     page = await browser.newPage();
+  });
+
+  afterAll(async () => {
+    await browser.close();
+    server.kill();
   });
 
   test("should render popover on click", async () => {
